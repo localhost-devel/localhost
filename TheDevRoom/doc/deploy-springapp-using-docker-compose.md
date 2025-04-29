@@ -168,11 +168,8 @@ This guide walks you through deploying a full Spring Boot + MongoDB stack using 
 
 📦 With Docker Compose, you streamline both app and DB management, saving time and reducing complexity in your dev workflow.
 
-# 👨‍💻 Created by
-
->**TheDevRoom**
+#### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)
 - 📞 Contact: +91 9999999999
-
 ---
