@@ -154,11 +154,8 @@ Perfect for developers who want a lightweight and reliable local environment wit
 
 ---
 
-# 👨‍💻 Created by
-
->**TheDevRoom**
+#### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)
 - 📞 Contact: +91 9999999999
-
 ---
