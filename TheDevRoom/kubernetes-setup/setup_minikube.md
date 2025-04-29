@@ -86,6 +86,7 @@ minikube delete
 - 🔗 [Kubernetes Documentation](https://kubernetes.io/docs/)
 
 
+---
 #### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)
