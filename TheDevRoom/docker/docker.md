@@ -1,18 +1,34 @@
+# 🐳 Docker Installation & Usage Guide
 
-# 🐳 Docker Installation and Usage Guide
+> Comprehensive Docker guide for beginners to advanced users. Includes setup, basic and advanced usage, cleanup, and best practices.
 
-Docker is a powerful open-source platform for building, running, and managing containerized applications. This guide walks you through the complete setup, configuration, and usage of Docker with practical examples and best practices.
+---
+
+## 📚 Table of Contents
+
+1. [📋 Prerequisites](#-prerequisites)
+2. [🚀 Installation Guide](#-installation-guide)
+    - [🔧 Install Docker Engine](#-step-1-install-docker-engine-on-ubuntu)
+    - [👥 Add User to Docker Group](#-add-user-to-docker-group)
+3. [🔍 Basic Docker Commands](#-basic-docker-commands)
+4. [📦 Working with Docker Images](#-working-with-docker-images)
+5. [📦 Docker Containers](#-docker-containers)
+6. [🛠️ Container Troubleshooting and Management](#️-container-troubleshooting-and-management)
+7. [🧹 Docker Cleanup](#-docker-cleanup)
+8. [🧠 Best Practices](#-best-practices)
+9. [🐙 Docker Registries](#-docker-registries)
+10. [📚 Helpful Resources](#-helpful-resources)
 
 ---
 
 ## 📋 Prerequisites
 
-Before getting started, ensure you have:
+Make sure the following requirements are met before proceeding:
 
-- A Linux-based system (e.g., Ubuntu/Debian/CentOS)
-- Sudo or root access to install packages
-- Basic understanding of shell commands
-- Internet access for installing packages
+- 🐧 Linux OS (Ubuntu/Debian/CentOS preferred)
+- 🔐 Sudo/root access
+- 🌐 Internet connection
+- 💡 Basic shell knowledge
 
 ---
 
@@ -20,315 +36,148 @@ Before getting started, ensure you have:
 
 ### 🔧 Step 1: Install Docker Engine on Ubuntu
 
-```bash
-curl -fsSL get.docker.com | /bin/bash
-```
-- Downloads and runs the official Docker installation script (quick method).
+#### 📦 Quick Script Installation (Recommended)
 
-OR
+```bash
+curl -fsSL https://get.docker.com | bash
+```
+
+#### 🛠️ Manual APT Installation
 
 ```bash
 sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io -y
+sudo apt install docker.io -y
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo systemctl status docker
-# Press CTRL+C to exit status view
 ```
-- Installs Docker and its dependencies using APT package manager.
-- Starts and enables Docker service to run at boot.
+
+---
 
 ### 👥 Add User to Docker Group
 
 ```bash
 sudo usermod -aG docker $USER
-```
-- Adds your user to the Docker group to allow running `docker` without `sudo`.
-
-**Important**: After running the above command, log out and back in OR run:
-```bash
 su - $USER
 ```
-to apply group changes.
+
+> 💡 Log out and log back in or run `su - $USER` to apply changes.
 
 ---
 
 ## 🔍 Basic Docker Commands
 
-### 🔧 Docker Version and Info
-
 ```bash
-docker version
+docker version        # Display Docker version
+docker info           # Docker setup details
+docker login          # Login to Docker registry
 ```
-- Displays Docker client and server version.
-
-```bash
-docker info
-```
-- Shows detailed information about the Docker setup.
-
-### 🔐 Login to Docker Registry
-
-```bash
-docker login
-```
-- Authenticates your local Docker client to Docker Hub or other registries.
 
 ---
 
 ## 📦 Working with Docker Images
 
-### 📜 List Docker Images
-
 ```bash
-docker images
+docker images                         # List images
+docker rmi <image_id>                # Remove image
+docker tag <image_id> repo/app:1.0   # Tag image
+docker push repo/app:1.0             # Push image to registry
+docker pull repo/app:1.0             # Pull image
+docker image prune                   # Remove dangling images
+docker history app:latest            # Show image layers
 ```
-- Lists all locally available Docker images.
-
-```bash
-docker images -f dangling=true
-```
-- Lists dangling images (untagged, unused images).
-
-### ❌ Remove Images
-
-```bash
-docker rmi <image_id>
-```
-- Removes a specific image by ID or name.
-
-```bash
-docker rmi $(docker images -q)
-```
-- Removes all images returned by `docker images -q` (all image IDs).
-
-```bash
-docker rmi -f $(docker images -q)
-```
-- Force removes all images, even if used by stopped containers.
-
-### 🏷️ Tag Images
-
-```bash
-docker tag <image_id> myrepo/myapp:v1.0
-```
-- Tags an existing image with a new name and version.
-
-### ⬆️⬇️ Push and Pull Images
-
-```bash
-docker push myrepo/myapp:v1.0
-docker pull myrepo/myapp:v1.0
-```
-- Push uploads an image to the registry. Pull downloads it.
-
-### 🧱 Image Layers
-
-```bash
-docker history myapp:latest
-```
-- Shows each layer used to build the image.
-
-### 🧹 Remove Dangling Images
-
-```bash
-docker image prune
-```
-- Deletes all dangling images to save space.
 
 ---
 
 ## 📦 Docker Containers
 
-### 🆕 Create Container
-
 ```bash
-docker create --name mycontainer myapp:latest
+docker create --name myapp myimage:1.0          # Create container
+docker run --name myapp myimage:1.0             # Run container
+docker run -d -p 8080:80 nginx                  # Detached run with port mapping
+docker start/stop/restart <name>               # Control containers
+docker rm <name>                               # Remove container
+docker ps / docker ps -a                       # List containers
+docker rename old new                          # Rename container
+docker pause/unpause <container>               # Pause/unpause
+docker kill <container>                        # Force stop
+docker exec -it <container> /bin/bash          # Access shell inside container
+docker cp ./file container:/path               # Copy to container
+docker cp container:/path ./file               # Copy from container
+docker commit mycontainer app:snapshot         # Save state as image
+docker attach <container>                      # Attach to terminal
+docker logs <container> --tail 10              # Tail logs
+docker top <container>                         # Running processes
+docker stats                                   # Resource usage
+docker container prune                         # Remove stopped containers
 ```
-- Creates a container from an image without starting it.
-
-### ▶️ Run a Container
-
-```bash
-docker run --name mycontainer myapp:latest
-```
-- Creates and starts a container.
-
-### 🌐 Run with Port Mapping
-
-```bash
-docker run -d -p 8080:80 --name webserver nginx
-```
-- Runs container in background with port 8080 mapped to 80.
-
-### 🔄 Start/Restart/Stop/Remove Containers
-
-```bash
-docker start <container_name>
-docker restart <container_name>
-docker stop <container_name>
-docker rm <container_name>
-```
-- Start/restart/stop or remove containers.
-
-### 📜 List Containers
-
-```bash
-docker ps
-docker ps -a
-```
-- Lists running (`ps`) or all (`-a`) containers.
-
-### 🛑 Kill Container
-
-```bash
-docker kill <container_id>
-```
-- Forces the container to stop immediately.
-
-### 🧹 Remove All Containers
-
-```bash
-docker rm $(docker ps -aq)
-docker rm -f $(docker ps -aq)
-```
-- Removes all containers. Add `-f` to force remove running ones.
-
-### 🔁 Rename, Pause, and Unpause Containers
-
-```bash
-docker rename old_name new_name
-docker pause <container_id>
-docker unpause <container_id>
-```
-- Rename or suspend/resume container execution.
-
-### 🧽 Prune Stopped Containers
-
-```bash
-docker container prune
-```
-- Deletes all stopped containers.
 
 ---
 
 ## 🛠️ Container Troubleshooting and Management
 
-### 🔍 Inspect Container Details
-
 ```bash
-docker inspect <container_name>
+docker inspect <container_name>         # Inspect container config
+docker logs <container>                 # View container logs
+docker logs -f <container>              # Follow logs
+docker logs <container> >> logs.txt     # Save logs to file
 ```
-- Shows low-level details of the container in JSON format.
-
-### 📄 View Logs
-
-```bash
-docker logs <container_name>
-docker logs -f <container_name>
-docker logs <container_name> --tail 10
-docker logs <container_name> >> logs.txt
-```
-- View and follow logs or write to file.
-
-### 🔎 View Processes in Container
-
-```bash
-docker top <container_name>
-```
-- Lists processes running inside the container.
-
-### 📊 Container Resource Stats
-
-```bash
-docker stats
-```
-- Shows real-time resource usage of running containers.
-
-### 🧠 Limit CPU & Memory
-
-```bash
-docker run --memory="512m" --cpus="1.0" myapp
-```
-- Restricts container to 512MB RAM and 1 CPU.
-
-### 🧰 Execute Command in Running Container
-
-```bash
-docker exec -it <container_name> /bin/bash
-```
-- Run an interactive shell in a running container.
-
-### 📌 Save Container State as Image
-
-```bash
-docker commit <container_name> myapp:snapshot
-```
-- Saves current container state as a new image.
-
-### 📂 Copy Files Between Host and Container
-
-```bash
-docker cp ./config.txt mycontainer:/app/config.txt
-docker cp mycontainer:/app/logs.txt ./logs.txt
-```
-- Copies files to/from container.
-
-### 🔗 Attach to Container
-
-```bash
-docker attach <container_name>
-```
-- Attach to the running container's main process.
 
 ---
 
 ## 🧹 Docker Cleanup
 
-### 🧹 Remove All Unused Resources
-
 ```bash
-docker system prune
+docker system prune             # Remove all unused data
+docker image prune              # Remove unused images
+docker container prune          # Remove stopped containers
+docker volume prune             # Remove unused volumes
 ```
-- Cleans up all unused containers, networks, images, and cache.
-
-### 🧹 Remove Unused Volumes
-
-```bash
-docker volume prune
-```
-- Removes all unused volumes.
 
 ---
 
 ## 🧠 Best Practices
-- Keep images small and use official base images.
-- Use tags and versioning for image management.
-- Run one process per container.
-- Clean up unused images and containers regularly.
+
+- Use **lightweight base images** (e.g., `alpine`, `debian-slim`)
+- Always **tag your images** (avoid `latest` in production)
+- Use **multi-stage builds** to reduce image size
+- Keep containers **single-purpose**
+- Regularly clean up unused images, containers, and volumes
+- Use `.dockerignore` to exclude files from builds
+- Use **volumes** for persistent storage
+- Pin base image versions for consistency
 
 ---
 
 ## 🐙 Docker Registries
 
-- **Docker Hub**: https://hub.docker.com/
-- **GitHub Container Registry**: https://github.com/features/packages
-- **Self-hosted (e.g., Harbor, Nexus, etc.)**
+| Registry        | Description                        |
+|----------------|------------------------------------|
+| Docker Hub      | Official Docker public registry    |
+| GitHub Packages | Container registry via GitHub      |
+| Harbor/Nexus    | Enterprise-grade private registries |
+
+```bash
+docker login
+docker tag app myregistry/app:v1
+docker push myregistry/app:v1
+docker pull myregistry/app:v1
+```
 
 ---
 
 ## 📚 Helpful Resources
 
-- [Docker Official Documentation](https://docs.docker.com/)
-- [Docker GitHub Repo](https://github.com/docker/docker-ce)
-- [Play with Docker (Labs)](https://labs.play-with-docker.com/)
-- [Awesome Docker Resources](https://github.com/veggiemonk/awesome-docker)
+- 📘 [Docker Docs](https://docs.docker.com/)
+- 💻 [Play with Docker](https://labs.play-with-docker.com/)
+- 🚀 [Docker GitHub](https://github.com/docker/docker-ce)
+- 🌱 [Awesome Docker](https://github.com/veggiemonk/awesome-docker)
+
 
 ---
+> Happy Containerizing! 🚀
 
-Happy Containerizing! 🚀
-
-
+---
 #### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)

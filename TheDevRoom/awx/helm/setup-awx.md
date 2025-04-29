@@ -166,6 +166,7 @@ kubectl delete namespace awx
 - [Helm Chart Repo](https://ansible-community.github.io/awx-operator-helm/)
 - [AWX Installation Docs](https://github.com/ansible/awx/blob/devel/INSTALL.md)
 
+---
 #### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)

@@ -99,6 +99,7 @@ sudo snap remove microk8s
 - 🔗 [MicroK8s Docs](https://microk8s.io/docs)
 - 🔗 [Kubernetes Official Docs](https://kubernetes.io/docs/)
 
+---
 #### 👨‍💻 Created by: TheDevRoom
 
 - 🌐 Website: [TheDevRoom](https://github.com/localhost-devel/localhost-devel/blob/master/README.md)
